@@ -1,0 +1,133 @@
+{% extends 'core/base.html' %}
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+
+      <div class="card shadow-sm">
+
+        <!-- HEADER -->
+        <div class="card-header bg-success text-white text-center">
+          Registro
+        </div>
+
+        <div class="card-body">
+
+          {% if success %}
+            <div class="alert alert-success text-center">
+              Usuario registrado correctamente
+            </div>
+          {% endif %}
+
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+
+          <form method="post">
+            {% csrf_token %}
+
+            <!-- USERNAME -->
+            <div class="form-group mb-3">
+              {{ form.username.label_tag }}
+              {{ form.username }}
+              {{ form.username.errors }}
+            </div>
+
+            <!-- NOMBRE -->
+            <div class="form-group mb-3">
+              {{ form.first_name.label_tag }}
+              {{ form.first_name }}
+              {{ form.first_name.errors }}
+            </div>
+
+            <!-- CÓDIGO -->
+            <div class="form-group mb-3">
+              {{ form.last_name.label_tag }}
+              <div class="input-group">
+                {{ form.last_name }}
+                <button class="btn btn-outline-primary" type="button" onclick="copiarCodigo()">
+                  📋
+                </button>
+              </div>
+              <small id="copyMsg" class="text-success d-none">
+                Código copiado ✔
+              </small>
+              {{ form.last_name.errors }}
+            </div>
+
+            <!-- EMAIL -->
+            <div class="form-group mb-3">
+              {{ form.email.label_tag }}
+              {{ form.email }}
+              {{ form.email.errors }}
+            </div>
+
+            <!-- PASSWORD 1 -->
+            <div class="form-group mb-3">
+              {{ form.password1.label_tag }}
+              {{ form.password1 }}
+              {{ form.password1.errors }}
+            </div>
+
+            <!-- PASSWORD 2 -->
+            <div class="form-group mb-3">
+              {{ form.password2.label_tag }}
+              {{ form.password2 }}
+              {{ form.password2.errors }}
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">
+              Confirmar
+            </button>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ===================== JS ===================== -->
+<script>
+/* Copiar código */
+function copiarCodigo() {
+  const input = document.getElementById("codigo");
+  const msg = document.getElementById("copyMsg");
+
+  if (!input || !input.value) return;
+
+  navigator.clipboard.writeText(input.value);
+  msg.classList.remove("d-none");
+
+  setTimeout(() => msg.classList.add("d-none"), 2000);
+}
+
+/* Username y Email siempre en minúsculas */
+document.addEventListener("DOMContentLoaded", function () {
+
+  const usernameInput = document.getElementById("id_username");
+  const emailInput = document.getElementById("id_email");
+
+  if (usernameInput) {
+    usernameInput.addEventListener("input", function () {
+      this.value = this.value.toLowerCase();
+    });
+  }
+
+  if (emailInput) {
+    emailInput.addEventListener("input", function () {
+      this.value = this.value.toLowerCase();
+    });
+  }
+
+});
+</script>
+{% endblock %}
